@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:owl_book/services/auth.dart';
 import 'package:owl_book/shared/loading.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:owl_book/services/database.dart';
+
 class Register extends StatefulWidget {
   final Function toggleView;
   Register({this.toggleView});
@@ -124,6 +127,27 @@ class _RegisterState extends State<Register> {
                       else
                         {
 //                          add the location and phone number in the database i do not know how yet
+                          double longitude=0.0;
+                          double latitude=0.0;
+                          final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+                          geolocator
+                              .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+                              .then((Position position) async {
+                              longitude=position.longitude;
+                              latitude=position.latitude;
+//                              print(longitude);
+//                              print("------------------------------------------------------");
+//                              print(latitude);
+                              await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[]);
+
+                          }).catchError((e) {
+                            print(e);
+                          });
+
+
+
+
 
                         }
                     }
@@ -157,6 +181,7 @@ class _RegisterState extends State<Register> {
 
 
   }
+
 }
 
 //Container(

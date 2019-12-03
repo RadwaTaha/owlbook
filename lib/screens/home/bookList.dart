@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:owl_book/models/user.dart';
+import 'package:owl_book/services/database.dart';
+import 'package:owl_book/services/auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -120,7 +124,7 @@ void _navigateToDetailsPage(Book book, BuildContext context) {
 class BookDetailsPage extends StatelessWidget {
   final Book book;
   BookDetailsPage(this.book);
-
+  final AuthService _auth=AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,12 +135,22 @@ class BookDetailsPage extends StatelessWidget {
 
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           // Add your onPressed code here!
+
+
+//         Future <FirebaseUser> user= FirebaseAuth.instance.currentUser();
+//         print(user.uid);
+        FirebaseUser user= await FirebaseAuth.instance.currentUser();
+        print(user.uid);
           // adding books to user account
           print(book.title);
           print(book.author);
           print(book.thumbnailUrl);
+          DatabaseService databaseService = await DatabaseService(uid: user.uid);
+          databaseService.addBooks(book.title, book.author, book.thumbnailUrl);
+
+
 
         },
         child: Icon(Icons.add),
