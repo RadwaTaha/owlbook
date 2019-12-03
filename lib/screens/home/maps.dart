@@ -23,18 +23,21 @@ class _HomePageState extends State<Maps> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             if (_currentPosition != null)
-              Text(
-                  "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+              Text("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
 
             FloatingActionButton(
 
               onPressed: () {
                 // Add your onPressed code here!
                 _getCurrentLocation();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MarkerPerson()),
-                );
+                print(_currentPosition.longitude);
+                print("-------------------------------------------------------");
+                print(_currentPosition.latitude);
+
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(builder: (context) => MarkerPerson()),
+//                );
               },
               child: Icon(Icons.navigation),
               backgroundColor: Colors.green,
