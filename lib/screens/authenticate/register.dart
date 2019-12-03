@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:owl_book/services/auth.dart';
+import 'package:owl_book/shared/loading.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:owl_book/services/database.dart';
+
 class Register extends StatefulWidget {
   final Function toggleView;
   Register({this.toggleView});
@@ -10,18 +14,22 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  bool loading=false;
   // text field state
   String email = '';
   String password = '';
   String phone='';
+  String error='';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
 
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
+          key: _formKey,
           child: Column(
             children: <Widget>[
               SizedBox(height: 15.0),
@@ -39,6 +47,7 @@ class _RegisterState extends State<Register> {
                         fontSize: 15
                     )
                 ),
+                validator: (val) => val.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
@@ -58,6 +67,7 @@ class _RegisterState extends State<Register> {
                         fontSize: 15
                     )
                 ),
+                validator: (val) => val.length< 6 ? 'Enter a password with chars less than 6' : null,
                 onChanged: (val) {
                   setState(() => password = val);
                 },
@@ -77,6 +87,7 @@ class _RegisterState extends State<Register> {
                         fontSize: 15
                     )
                 ),
+                validator: (val) => val != password ? 'confirm your password please!' : null,
               ),
               SizedBox(height: 10.0,),
               TextFormField(
@@ -93,6 +104,7 @@ class _RegisterState extends State<Register> {
                         fontSize: 15
                     )
                 ),
+                validator: (val) => val.length <7 ? 'Enter a valid phone number' : null,
                 onChanged: (val) {
                   setState(() => phone = val);
                 },
@@ -100,9 +112,46 @@ class _RegisterState extends State<Register> {
               SizedBox(height: 10.0,),
               MaterialButton(
                 onPressed: () async {
-                  print(email);
-                  print(password);
-                  print(phone);
+                  if(_formKey.currentState.validate())
+                    {
+                      loading=true;
+                      dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                      if(result == null)
+                        {
+                          setState(() {
+                            error = 'please supply a valid email!!';
+                            loading=false;
+                          });
+
+                        }
+                      else
+                        {
+//                          add the location and phone number in the database i do not know how yet
+                          double longitude=0.0;
+                          double latitude=0.0;
+                          final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+                          geolocator
+                              .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+                              .then((Position position) async {
+                              longitude=position.longitude;
+                              latitude=position.latitude;
+//                              print(longitude);
+//                              print("------------------------------------------------------");
+//                              print(latitude);
+                              await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[]);
+
+                          }).catchError((e) {
+                            print(e);
+                          });
+
+
+
+
+
+                        }
+                    }
+
                 },
                 child: Text('SIGN UP',
                   style: TextStyle(
@@ -120,6 +169,8 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(10)
                 ),
               ),
+              SizedBox(height: 12.0,),
+              Text(error,style: TextStyle(color: Colors.red,fontSize: 14.0))
 
 
             ],
@@ -130,6 +181,7 @@ class _RegisterState extends State<Register> {
 
 
   }
+
 }
 
 //Container(
