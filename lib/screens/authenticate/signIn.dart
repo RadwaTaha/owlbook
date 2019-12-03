@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:owl_book/services/auth.dart';
+import 'package:owl_book/shared/loading.dart';
 class SignIn extends StatefulWidget {
   final Function toggleView;
   SignIn({this.toggleView});
@@ -10,17 +11,22 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  bool loading=false;
   // text field state
   String email = '';
   String password = '';
+  String error='';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
 
       body: Container(
+
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
+          key: _formKey,
           child: Column(
             children: <Widget>[
 
@@ -32,12 +38,13 @@ class _SignInState extends State<SignIn> {
                   ),
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Username',
+                      labelText: 'email',
                       prefixIcon: Icon(Icons.person_outline),
                       labelStyle: TextStyle(
                           fontSize: 15
                       )
                   ),
+                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
                   onChanged: (val) {
                     setState(() => email = val);
                   }
@@ -57,6 +64,7 @@ class _SignInState extends State<SignIn> {
                         fontSize: 15
                     )
                 ),
+                validator: (val) => val.length< 6 ? 'Enter a password with chars less than 6' : null,
                 onChanged: (val) {
                   setState(() => password = val);
                 },
@@ -66,6 +74,27 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async{
                   print(email);
                   print(password);
+                  if(_formKey.currentState.validate())
+                  {
+                    setState(() {
+                      loading=true;
+                    });
+                    dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                    if(result == null)
+                    {
+                      setState(() {
+                        error = 'Could not sign in with those credentials';
+                        loading=false;
+                      });
+
+                    }
+                    else
+                    {
+//                          add the location and phone number in the database i do not know how yet
+
+                    }
+                  }
+
                 },//since this is only a UI app
                 child: Text('SIGN IN',
                   style: TextStyle(
@@ -84,6 +113,8 @@ class _SignInState extends State<SignIn> {
                 ),
 
               ),
+              SizedBox(height: 12.0,),
+              Text(error,style: TextStyle(color: Colors.red,fontSize: 14.0)),
               Padding(
                 padding: EdgeInsets.only(top: 30),
                 child: Center(
