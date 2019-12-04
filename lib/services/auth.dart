@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:owl_book/models/user.dart';
 import 'package:owl_book/services/database.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:owl_book/services/AppSettings.config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService{
 
@@ -42,6 +45,13 @@ Future signInAnon() async{
     {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
+      GlobalConfiguration cfg =  GlobalConfiguration().loadFromMap(appSettings);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString("uid", user.uid);
+      await prefs.setString("email", user.email);
+      cfg.updateValue("uid", user.uid);
+      print("keysssssssssssss ${cfg.getString("uid")}");
       return _userFromFirebase(user);
     }
     catch(e)
@@ -74,6 +84,14 @@ Future signInAnon() async{
 // sign out
 Future signOut() async{
   try{
+    GlobalConfiguration cfg =  GlobalConfiguration().loadFromMap(appSettings);
+    print("nadooodifromlalaland ${cfg.getString("uid")}");
+//    print("Key2 has value ${GlobalConfiguration().getString("key2")}");
+//    print("Key5 has value ${cfg.getString("key5")}, this should be null!");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+//    await prefs.setString("uid", user.uid);
+    print("nadooojjsjjjdi ${prefs.get("uid")}");
     return await _auth.signOut();
   }
   catch(e)

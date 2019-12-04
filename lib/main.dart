@@ -7,7 +7,6 @@ import 'screens/authenticate/register.dart';
 import 'signIn.dart';
 import 'signUp.dart';
 //import 'profile.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {

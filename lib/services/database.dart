@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:owl_book/models/user.dart';
+import 'package:geocoder/geocoder.dart';
 
 class Book{
   String name;
@@ -55,6 +56,5 @@ class DatabaseService
   Future sameBookUsers(String bookName) {
 
   }
-
 
 }
