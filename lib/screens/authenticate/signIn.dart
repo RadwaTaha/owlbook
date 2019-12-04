@@ -22,13 +22,17 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
 
-      body: Container(
-
+      body: 
+      Container(       
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              Image.asset(
+                'Assets/logo.png',
+              ),
 
               SizedBox(height: 30.0),
               TextFormField(
