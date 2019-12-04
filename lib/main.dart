@@ -4,8 +4,8 @@ import 'package:owl_book/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'screens/wrapper.dart';
 import 'models/user.dart';
-import 'screens/authenticate/register.dart';
-import 'signUp.dart';
+//import 'screens/authenticate/register.dart';
+//import 'signUp.dart';
 //import 'profile.dart';
 
 void main() => runApp(MyApp());
