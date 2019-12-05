@@ -7,6 +7,7 @@ import 'models/user.dart';
 //import 'screens/authenticate/register.dart';
 //import 'signUp.dart';
 import 'screens/home/profile.dart';
+import 'screens/home/profile2.dart';
 
 void main() => runApp(MyApp());
 
