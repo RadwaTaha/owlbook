@@ -191,8 +191,6 @@ class _MyHomePageState extends State<MyHomePage> {
      });
 
       print(_markers.length);
-
-
     });
 
                         }
