@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:owl_book/services/auth.dart';
 
-import 'package:flutter/material.dart';
 
 var COLORS = [
   Color(0xffc12026),
@@ -12,7 +11,7 @@ var COLORS = [
 ];
 
 class profile2 extends StatelessWidget {
-
+final AuthService _auth=AuthService();
   var data = [{
       "title": "Hey Flutterers, See what I did with Flutter",
       "content": "This is just a text description of the item",
@@ -169,7 +168,10 @@ class profile2 extends StatelessWidget {
 
                               ),
                               new MaterialButton(
-                                onPressed: () {}, //since this is only a UI app
+                                onPressed: () async {
+                                  // Add your onPressed code here!
+                                  await _auth.signOut();
+                                }, //since this is only a UI app
                                 child: Text('Log out',
                                   style: TextStyle(
                                     color: Color(0xffc12026),
@@ -181,8 +183,8 @@ class profile2 extends StatelessWidget {
                                 color: Colors.white,
                                 elevation: 0,
                                 minWidth: 80,
-                                height: 30, 
-                                
+                                height: 30,
+
                                 textColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)
