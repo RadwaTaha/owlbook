@@ -112,7 +112,7 @@ class profile2 extends StatelessWidget {
                 child: new Stack(
                   children: [
                     new Image.network(
-                      "https://images.pexels.com/photos/1112048/pexels-photo-1112048.jpeg?cs=srgb&dl=bible-biblia-book-bindings-1112048.jpg&fm=jpg",
+                      "https://images.unsplash.com/photo-1497100022365-1a3688dc53ec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=923&q=80",
                       fit: BoxFit.cover,
                     ),
                     new Opacity(
@@ -126,64 +126,83 @@ class profile2 extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: < Widget > [
                           new SizedBox(height: 50.0),
-                          new ListTile(
-                            leading: new CircleAvatar(
+                          new Row(
 
-                              child: new Container(
-                                decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.transparent,
-                                  image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                      "https://avatars2.githubusercontent.com/u/3234592?s=460&v=4"),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: < Widget > [
+                              new CircleAvatar(
+
+                                child: new Container(
+                                  decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.transparent,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        "https://avatars2.githubusercontent.com/u/3234592?s=460&v=4"),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                              new SizedBox(width: 25.0),
+                              new Column(
+                                children: < Widget > [
+                                  new Text(
+                                    "Moaz Ashraf",
 
-                            title: new Text(
-                              "Moaz Ashraf",
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 27.0,
+                                      letterSpacing: 2.0),
+                                  ),
+                                  new Text(
+                                    "moaazashraf98@gmail.com",
 
-                              style: new TextStyle(
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12.0,
+                                      letterSpacing: 2.0),
+                                  ),
+
+                                ],
+
+
+                              ),
+                              new MaterialButton(
+                                onPressed: () {}, //since this is only a UI app
+                                child: Text('Log out',
+                                  style: TextStyle(
+                                    color: Color(0xffc12026),
+                                    fontSize: 15,
+                                    fontFamily: 'SFUIDisplay',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 color: Colors.white,
-                                fontSize: 27.0,
-                                letterSpacing: 2.0),
-                            ),
+                                elevation: 0,
+                                minWidth: 80,
+                                height: 30, 
+                                
+                                textColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                              ),
 
-                            subtitle: new Text(
-                              "moaazashraf98@gmail.com",
 
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 12.0,
-                                letterSpacing: 2.0),
-                            ),
+
+
+                            ],
+
 
                           ),
-                          // MaterialButton(
-                          //   onPressed: () {}, //since this is only a UI app
-                          //   child: Text('LOG OUT',
-                          //     style: TextStyle(
-                          //       fontSize: 15,
-                          //       fontFamily: 'SFUIDisplay',
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          //   color: Color(0xffff2d55),
-                          //   elevation: 0,
-                          //   minWidth: 400,
-                          //   height: 10,
-                          //   textColor: Colors.white,
-                          //   shape: RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(10)
-                          //   ),
-                          // ),
+
 
                         ],
                       )
 
                     ),
+
                   ],
                 ),
               ),
@@ -296,6 +315,7 @@ class _AwesomeListItemState extends State < AwesomeListItem > {
                   ),
                 ),
               ),
+
             ],
           ),
         ),
