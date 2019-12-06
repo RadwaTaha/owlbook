@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
 
         debugShowMaterialGrid: false,
-        home: Wrapper(),
+        home: profile2(),
 
         debugShowCheckedModeBanner: false,
       ),
