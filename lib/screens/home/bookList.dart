@@ -137,10 +137,6 @@ class BookDetailsPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Add your onPressed code here!
-
-
-//         Future <FirebaseUser> user= FirebaseAuth.instance.currentUser();
-//         print(user.uid);
         FirebaseUser user= await FirebaseAuth.instance.currentUser();
         print(user.uid);
           // adding books to user account
@@ -149,9 +145,6 @@ class BookDetailsPage extends StatelessWidget {
           print(book.thumbnailUrl);
           DatabaseService databaseService = await DatabaseService(uid: user.uid);
           databaseService.addBooks(book.title, book.author, book.thumbnailUrl);
-
-
-
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.red,

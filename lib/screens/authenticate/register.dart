@@ -143,7 +143,7 @@ class _RegisterState extends State<Register> {
 //                              print(longitude);
 //                              print("------------------------------------------------------");
 //                              print(latitude);
-                              await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[]);
+                              await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[],email);
 
                           }).catchError((e) {
                             print(e);

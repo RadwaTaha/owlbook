@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'locations.dart' as locations;
 
 
 
@@ -14,7 +13,6 @@ class MarkerPerson extends StatefulWidget {
 class _MarkerPersonState extends State<MarkerPerson> {
   final Map<String, Marker> _markers = {};
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await locations.getGoogleOffices();
     setState(() {
       _markers.clear();
       final marker = Marker(
@@ -31,6 +29,7 @@ class _MarkerPersonState extends State<MarkerPerson> {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: Scaffold(
       appBar: AppBar(
         title: const Text('Google Office Locations'),
