@@ -1,49 +1,40 @@
+import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:owl_book/shared/loading.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:owl_book/services/database.dart';
+import 'package:owl_book/services/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Marker_Person_location.dart';
+import 'BookOwnerProfile.dart';
+//import 'mapGeo.dart';
+void main() => runApp(Maps());
 
-class Maps extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-<<<<<<< Updated upstream
-class _HomePageState extends State<Maps> {
-  Position _currentPosition;
+class Maps extends StatelessWidget {
+  // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Location"),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+
+        primarySwatch: Colors.blue,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if (_currentPosition != null)
-              Text("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+      home: MyHomePage(title:"hello"),
+    );
+  }
+}
 
-            FloatingActionButton(
-
-              onPressed: () {
-                // Add your onPressed code here!
-                _getCurrentLocation();
-                print(_currentPosition.longitude);
-                print("-------------------------------------------------------");
-                print(_currentPosition.latitude);
-
-//                Navigator.push(
-//                  context,
-//                  MaterialPageRoute(builder: (context) => MarkerPerson()),
-//                );
-              },
-              child: Icon(Icons.navigation),
-              backgroundColor: Colors.green,
-            )
-=======
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
@@ -65,7 +56,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Position currentLocation;
   BitmapDescriptor customIcon;
   final mycontroller = TextEditingController();
-  String book;
+  static String BOName ="";
+   static String BOEmail="";
+
+
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
@@ -103,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   markerId: MarkerId(uid),
                   position: LatLng(currentLocation.latitude,currentLocation.longitude),
                   infoWindow: InfoWindow(title: mail,snippet: address),
+
                 );
                 _markers[uid]=marker;
 
@@ -119,10 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 //    createMarker(context);
-
-
     return Scaffold(
-
         body: mapToggle? Stack(
           children: <Widget>[
             GoogleMap(
@@ -147,7 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.white
                 ),
                 child: TextField(
-                  controller: mycontroller,
                   decoration: InputDecoration(
                       hintText: 'Enter Book',
                       border: InputBorder.none,
@@ -183,54 +174,75 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: RaisedButton(
                   color: Color(0xffc12026),
                   onPressed: () {
+                    int count=0;
 
 
-
-                    final CollectionReference userCollection = Firestore.instance
-                        .collection('users');
+                    final CollectionReference userCollection = Firestore.instance.collection('users');
                     userCollection.snapshots().listen((snapshot) {
                       snapshot.documents.forEach((doc)  {
                         print("hello");
-
-                        if (doc.documentID != uid) {
-//                          print(bookName);
-//                          print("hello2");
                         bool found=false;
-                        if(doc.data["books"].length!=0) {
-                          print(doc.data['books']);
-                          for(int i=0;doc.data['books'].length>i;i++){
-                            String nameBook=doc.data['books'][i]['name'];
-                            if(nameBook.toLowerCase()==bookName.toLowerCase()){
-                              found=true;
-                            }
+
+                        for (int i = 0; doc.data['books'].length > i; i++) {
+                          String book = doc.data['books'][i]['name'];
+                          if (book.toLowerCase() == bookName.toLowerCase()) {
+                            found = true;
                           }
                         }
-                        if(found){
-                          print("booooooooook owner ${doc.data['email']}");
-                          final coordinates1 = new Coordinates(doc.data['lattitude'], doc.data['longitude']);
-                          Geocoder.local.findAddressesFromCoordinates(coordinates1).then((addresses1){
-                            var first1 = addresses1.first;
-                            final marker1 = Marker(
-                              markerId: MarkerId(doc.documentID),
-                              position: LatLng(doc.data['lattitude'], doc
-                                  .data['longitude']),
-                              infoWindow: InfoWindow(
-                                  title: doc.data['email'], snippet: first1.addressLine),
-
-                            );
-
-                            setState(() {
-                              _markers[doc.documentID] = marker1;
-
-                            });
 
 
-                            print(_markers.length);
-                          });
+                        if (doc.documentID != uid) {
+                          if(found){
+                            print("hello2");
+                            print(doc.data['lattitude']);
+                            double totalDistance = 0;
+                            totalDistance = calculateDistance(currentLocation.latitude, currentLocation.longitude, doc.data['lattitude'], doc.data['longitude']);
+                            print(totalDistance);
+                            print(doc.data['email']);
+                            print("---------------------------------------------------------");
 
-                        }
+                            if(totalDistance<50) {
+                              count++;
+                              final coordinates1 = new Coordinates(
+                                  doc.data['lattitude'],
+                                  doc.data['longitude']);
+                              Geocoder.local
+                                  .findAddressesFromCoordinates(
+                                  coordinates1).then((addresses1) {
+                                var first1 = addresses1.first;
+                                BOName=doc.data['Name'];
+                                BOEmail=doc.data['email'];
+                                final marker1 = Marker(
+                                  markerId: MarkerId(doc.documentID),
+                                  position: LatLng(doc.data['lattitude'],
+                                      doc.data['longitude']),
+                                  infoWindow: InfoWindow(
+                                      title: doc.data['email'],
+                                      snippet: first1.addressLine,
+                                      onTap:(){ Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => BookOwnerProfile()),
+                                      );}
 
 
+
+                                      ),
+
+
+                                        );
+                                setState(() {
+                                  _markers[doc.documentID] = marker1;
+                                });
+
+                                print(_markers.length);
+                              });
+                            }
+//                                  ---------------------------------
+                          }
+//                                ----------------------------------------Pop up menu---------------------------------------------------------
+                          if(count==0){
+                            print("no books found for you sorry;(");
+                          }
 
                         }
                       });
@@ -247,28 +259,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   ),
                 ),
-                         ),
-                          ),
+              ),
+            ),
 
->>>>>>> Stashed changes
 
           ],
-        ),
-      ),
+        ):Loading()
+
     );
+
   }
 
-  _getCurrentLocation() {
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-    geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
-    }).catchError((e) {
-      print(e);
+  void onMapCreated(controller){
+    setState(() {
+      mapController=controller;
     });
   }
+
+
+  double calculateDistance(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  
+
 }
