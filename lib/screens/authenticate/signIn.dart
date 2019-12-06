@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owl_book/services/auth.dart';
 import 'package:owl_book/shared/loading.dart';
@@ -16,19 +17,23 @@ class _SignInState extends State<SignIn> {
   // text field state
   String email = '';
   String password = '';
-  String error='';
+  String error= '';
 
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
 
-      body: Container(
-
+      body: 
+      Container(       
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              Image.asset(
+                'Assets/logo.png',
+              ),
 
               SizedBox(height: 30.0),
               TextFormField(
@@ -115,57 +120,59 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 12.0,),
               Text(error,style: TextStyle(color: Colors.red,fontSize: 14.0)),
-              Padding(
-                padding: EdgeInsets.only(top: 30),
-                child: Center(
-                  child: RichText(
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: "Don't have an account?",
-                              style: TextStyle(
-                                fontFamily: 'SFUIDisplay',
-                                color: Colors.black,
-                                fontSize: 15,
-                              )
-                          ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 0),
+                    child: Center(
 
-                          TextSpan(
-                              text: "sign up",
-                              style: TextStyle(
-                                fontFamily: 'SFUIDisplay',
-                                color: Color(0xffc12026),
-                                fontSize: 15,
-                              )
-                          )
-                        ]
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: "Don't have an account?",
+                                  style: TextStyle(
+                                    fontFamily: 'SFUIDisplay',
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                  )
+                              ),
+                            ]
+                        ),
+                      ),
+
                     ),
+
                   ),
 
-                ),
+                  FlatButton(
 
-              ),
-              FlatButton(
-                color: Colors.white,
-                textColor: Color(0xffc12026),
-                disabledColor: Colors.grey,
-                disabledTextColor: Colors.black,
-                padding: EdgeInsets.all(8.0),
-                splashColor: Colors.white,
-                onPressed: () {
-                  /*...*/
-                  widget.toggleView();
 
-                },
-                child: Text(
-                  "Sign Up",
-                  style: TextStyle(
-                    fontFamily: 'SFUIDisplay',
-                    color: Color(0xffc12026),
-                    fontSize: 15,
-                  ),
-                ),
+                    textColor: Color(0xffc12026),
+                    disabledColor: Colors.grey,
+                    disabledTextColor: Colors.black,
+                    padding: EdgeInsets.all(8.0),
+                    splashColor: Colors.white,
+                    onPressed: () {
+                      /*...*/
+                      widget.toggleView();
+
+                    },
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(
+                        fontFamily: 'SFUIDisplay',
+                        color: Color(0xffc12026),
+                        fontSize: 15,
+                      ),
+                    ),
+                  )
+
+                ],
               )
+
             ],
           ),
         ),

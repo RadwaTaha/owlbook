@@ -31,8 +31,12 @@ class _RegisterState extends State<Register> {
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 15.0),
+//              Image.asset(
+//                'Assets/logo.png',
+//              ),
+              SizedBox(height: 23.0),
 
               TextFormField(
                 style: TextStyle(
@@ -52,7 +56,7 @@ class _RegisterState extends State<Register> {
                   setState(() => email = val);
                 },
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 23.0),
               TextFormField(
                 obscureText: true,
                 style: TextStyle(
@@ -72,7 +76,7 @@ class _RegisterState extends State<Register> {
                   setState(() => password = val);
                 },
               ),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 23.0,),
               TextFormField(
                 obscureText: true,
                 style: TextStyle(
@@ -89,7 +93,7 @@ class _RegisterState extends State<Register> {
                 ),
                 validator: (val) => val != password ? 'confirm your password please!' : null,
               ),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 23.0,),
               TextFormField(
                 obscureText: true,
                 style: TextStyle(
@@ -109,7 +113,7 @@ class _RegisterState extends State<Register> {
                   setState(() => phone = val);
                 },
               ),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 23.0,),
               MaterialButton(
                 onPressed: () async {
                   if(_formKey.currentState.validate())
