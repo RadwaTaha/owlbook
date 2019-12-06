@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:owl_book/services/auth.dart';
 import 'package:owl_book/shared/loading.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:owl_book/services/AppSettings.config.dart';
+
 class SignIn extends StatefulWidget {
   final Function toggleView;
   SignIn({this.toggleView});
@@ -10,6 +13,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
@@ -21,6 +25,10 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalConfiguration cfg =  GlobalConfiguration().loadFromMap(appSettings);
+    print("Key1 has value ${cfg.getString("uid")}");
+    print("Key2 has value ${GlobalConfiguration().getString("key2")}");
+    print("Key5 has value ${cfg.getString("key5")}, this should be null!");
     return loading ? Loading() : Scaffold(
 
       body: 
