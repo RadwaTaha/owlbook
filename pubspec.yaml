@@ -53,6 +53,8 @@ flutter:
   assets:
     - Assets/logo.png
     - Assets/birds.jpg
+    - Assets/search.png
+
 
 
 
