@@ -4,12 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:owl_book/models/user.dart';
 import 'package:owl_book/services/database.dart';
 import 'package:owl_book/services/auth.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:owl_book/services/AppSettings.config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+GlobalConfiguration cfg =  GlobalConfiguration().loadFromMap(appSettings);
 
-String  url =
-    'https://www.googleapis.com/books/v1/volumes?q=';
+String  url =cfg.getString("bookAPI");
 
 void main() => runApp(MyApp());
 
@@ -92,9 +94,6 @@ Future<List<Book>> _fetchPotterBooks() async {
 List<Book> _parseBookJson(String jsonStr) {
   final jsonMap = json.decode(jsonStr);
   final jsonList = (jsonMap['items'] as List);
-//  print(jsonList[0]["volumeInfo"]["authors"]);
-//  print(jsonList[0]["volumeInfo"]["imageLinks"]["smallThumbnail"]);
-//  print(jsonList.length);
   List<Book> books=[];
   for(int i=0;jsonList.length>i;i++)
   {
@@ -137,21 +136,14 @@ class BookDetailsPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Add your onPressed code here!
-
-
-//         Future <FirebaseUser> user= FirebaseAuth.instance.currentUser();
-//         print(user.uid);
-        FirebaseUser user= await FirebaseAuth.instance.currentUser();
-        print(user.uid);
+          FirebaseUser user= await FirebaseAuth.instance.currentUser();
+          print(user.uid);
           // adding books to user account
           print(book.title);
           print(book.author);
           print(book.thumbnailUrl);
           DatabaseService databaseService = await DatabaseService(uid: user.uid);
           databaseService.addBooks(book.title, book.author, book.thumbnailUrl);
-
-
-
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.red,

@@ -1,21 +1,21 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:owl_book/shared/loading.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:owl_book/services/database.dart';
 import 'package:owl_book/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:math' show cos, sqrt, asin;
 import 'BookOwnerProfile.dart';
-//import 'mapGeo.dart';
+
+
+
+
 void main() => runApp(Maps());
 
 class Maps extends StatelessWidget {
@@ -55,9 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Uint8List markerIcon;
   Position currentLocation;
   BitmapDescriptor customIcon;
-  final mycontroller = TextEditingController();
-  static String BOName ="";
-   static String BOEmail="";
 
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -66,15 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
     ui.FrameInfo fi = await codec.getNextFrame();
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
   }
-
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    mycontroller.dispose();
-    super.dispose();
-  }
-
-
-
 
 
   void initState(){
@@ -96,8 +84,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 final marker=Marker(
                   markerId: MarkerId(uid),
                   position: LatLng(currentLocation.latitude,currentLocation.longitude),
-                  infoWindow: InfoWindow(title: mail,snippet: address),
+                  infoWindow: InfoWindow(title: mail,snippet: address,onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BookOwnerProfile()),
+                    );
 
+                  }),
                 );
                 _markers[uid]=marker;
 
@@ -201,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             print(doc.data['email']);
                             print("---------------------------------------------------------");
 
-                            if(totalDistance<50) {
+                            if(totalDistance<500) {
                               count++;
                               final coordinates1 = new Coordinates(
                                   doc.data['lattitude'],
@@ -210,26 +203,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                   .findAddressesFromCoordinates(
                                   coordinates1).then((addresses1) {
                                 var first1 = addresses1.first;
-                                BOName=doc.data['Name'];
-                                BOEmail=doc.data['email'];
                                 final marker1 = Marker(
-                                  markerId: MarkerId(doc.documentID),
-                                  position: LatLng(doc.data['lattitude'],
-                                      doc.data['longitude']),
-                                  infoWindow: InfoWindow(
-                                      title: doc.data['email'],
-                                      snippet: first1.addressLine,
-                                      onTap:(){ Navigator.push(
+                                    markerId: MarkerId(doc.documentID),
+                                    position: LatLng(doc.data['lattitude'],
+                                        doc.data['longitude']),
+                                    infoWindow: InfoWindow(
+                                        title: doc.data['email'],
+                                        snippet: first1.addressLine),
+                                    onTap: (){
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) => BookOwnerProfile()),
-                                      );}
+                                      );
+                                    }
 
 
-
-                                      ),
-
-
-                                        );
+                                );
                                 setState(() {
                                   _markers[doc.documentID] = marker1;
                                 });
@@ -270,14 +259,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 
-
-  void onMapCreated(controller){
-    setState(() {
-      mapController=controller;
-    });
-  }
-
-
   double calculateDistance(lat1, lon1, lat2, lon2){
     var p = 0.017453292519943295;
     var c = cos;
@@ -287,6 +268,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return 12742 * asin(sqrt(a));
   }
 
-  
+
+  void onMapCreated(controller){
+    setState(() {
+      mapController=controller;
+    });
+  }
+
 
 }
