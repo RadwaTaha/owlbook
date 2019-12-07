@@ -14,6 +14,7 @@ class _AuthenticateState extends State<Authenticate> {
       showSignIn=!showSignIn;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     if(showSignIn)
@@ -24,12 +25,12 @@ class _AuthenticateState extends State<Authenticate> {
       );
     }
     else
-      {
-        return Container(
-          child: Register( toggleView: toggleView),
+    {
+      return Container(
+        child: Register( toggleView: toggleView),
 
-        );
-      }
+      );
+    }
 
   }
 }

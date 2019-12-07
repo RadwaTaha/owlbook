@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class SignInOne extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
+    print("helllloo nadooodi ");
     return Stack(
       children: <Widget>[
         Container(
-
           decoration: BoxDecoration(
-              color: Colors.white,
               image: DecorationImage(
                   image: AssetImage('Assets/logo.png'),
                   fit: BoxFit.fitWidth,
@@ -76,13 +77,25 @@ class SignInOne extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    color: Color(0xffc12026),
+                    color: Color(0xffff2d55),
                     elevation: 0,
                     minWidth: 400,
                     height: 50,
                     textColor: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Center(
+                    child: Text('Forgot your password?',
+                      style: TextStyle(
+                          fontFamily: 'SFUIDisplay',
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
@@ -104,7 +117,7 @@ class SignInOne extends StatelessWidget {
                                 text: "sign up",
                                 style: TextStyle(
                                   fontFamily: 'SFUIDisplay',
-                                  color: Color(0xffc12026),
+                                  color: Color(0xffff2d55),
                                   fontSize: 15,
                                 )
                             )

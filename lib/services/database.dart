@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:owl_book/models/user.dart';
+import 'package:geocoder/geocoder.dart';
 
 class Book{
   String name;
@@ -15,16 +16,20 @@ class DatabaseService
   DatabaseService({this.uid});
   final CollectionReference userCollection = Firestore.instance.collection('users');
 
-  Future updateUserData(String phoneNumber,double lattitude, double longitude,List books) async {
+  Future updateUserData(String phoneNumber,double lattitude, double longitude,List books,String email) async {
     return await userCollection.document(uid).setData({
       'phone':phoneNumber,
       'lattitude':lattitude,
       'longitude':longitude,
-      'books':books
+      'books':books,
+      'email':email
     });
 
   }
   Future addBooks(String name, String author , String cover) async{
+
+
+//    debugPrint(this.total.toString());
 //    return await userCollection.ge;
     DocumentSnapshot snapshot = await userCollection.document(uid).get();
     List userBooks=snapshot.data['books'];
@@ -39,13 +44,16 @@ class DatabaseService
     temp.add({'name':name,'author':author,'coverUrl':cover});
 
 
-    print(temp);
+//    print(temp);
     return await userCollection.document(uid).setData({
       'phone':phone,
       'lattitude':lattitude,
       'longitude':longitude,
       'books':temp
     });
+
+  }
+  Future sameBookUsers(String bookName) {
 
   }
 

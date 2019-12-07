@@ -15,7 +15,6 @@ import 'BookOwnerProfile.dart';
 
 
 
-
 void main() => runApp(Maps());
 
 class Maps extends StatelessWidget {
@@ -84,11 +83,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 final marker=Marker(
                   markerId: MarkerId(uid),
                   position: LatLng(currentLocation.latitude,currentLocation.longitude),
-                  infoWindow: InfoWindow(title: mail,snippet: address,onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BookOwnerProfile()),
-                    );
+                  infoWindow: InfoWindow(title: mail,snippet: address,onTap: () {
+//                    Navigator.push(
+//                      context,
+//                      MaterialPageRoute(builder: (context) => BookOwnerProfile()),
+//                    );
+
 
                   }),
                 );
@@ -186,16 +186,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         if (doc.documentID != uid) {
                           if(found){
-                            print("hello2");
-                            print(doc.data['lattitude']);
+                            //print("hello2");
+                            //print(doc.data['lattitude']);
                             double totalDistance = 0;
                             totalDistance = calculateDistance(currentLocation.latitude, currentLocation.longitude, doc.data['lattitude'], doc.data['longitude']);
                             print(totalDistance);
-                            print(doc.data['email']);
-                            print("---------------------------------------------------------");
+                           // print(doc.data['email']);
 
                             if(totalDistance<500) {
-                              count++;
                               final coordinates1 = new Coordinates(
                                   doc.data['lattitude'],
                                   doc.data['longitude']);
@@ -210,11 +208,48 @@ class _MyHomePageState extends State<MyHomePage> {
                                     infoWindow: InfoWindow(
                                         title: doc.data['email'],
                                         snippet: first1.addressLine),
-                                    onTap: (){
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => BookOwnerProfile()),
-                                      );
+                                        onTap: () {
+
+                                       print(found);
+                                      SharedPreferences.getInstance().then((prefs) {
+                                        List<String> books=[];
+                                        List<String> authors=[];
+                                        List<String> covers=[];
+//
+                                        for(int i=0;doc.data['books'].length>i;i++){
+                                          books.add(doc.data['books'][i]['name']);
+                                          authors.add(doc.data['books'][i]['author']);
+                                          covers.add(doc.data['books'][i]['coverUrl']);
+                                          //books[i]=doc.data['books'][i]['name'];
+                                         // authors[i]=doc.data['books'][i]['author'];
+                                         // covers[i]=doc.data['books'][i]['coverUrl'];
+                                        }
+
+
+//                                        SharedPreferences.getInstance().then((prefs) async{
+//                                          await prefs.setStringList("booksnames",books );
+//                                          await prefs.setStringList("bookauthors", authors);
+//                                          await prefs.setStringList("bookcovers", covers);
+//
+//
+//                                        });
+
+
+                                        print("hereeeeeeeeeeeeeeeeee");
+                                        prefs.setString("OwnerMail", doc.data['email']);
+                                        prefs.setString("Ownerphone", doc.data['phone']);
+                                        prefs.setStringList("Ownerbooknames", books);
+                                        prefs.setStringList("Ownerbookauthors", authors);
+                                        prefs.setStringList("Ownerbookcovers", covers);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => BookOwnerProfile(),
+                                        ));
+
+                                      });
+
+
+
                                     }
 
 
@@ -228,10 +263,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             }
 //                                  ---------------------------------
                           }
-//                                ----------------------------------------Pop up menu---------------------------------------------------------
-                          if(count==0){
-                            print("no books found for you sorry;(");
-                          }
+////                                ----------------------------------------Pop up menu---------------------------------------------------------
+//                          if(count==0){
+//                            print("no books found for you sorry;(");
+//                          }
 
                         }
                       });

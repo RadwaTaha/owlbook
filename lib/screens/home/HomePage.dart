@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:owl_book/screens/home/profile2.dart';
 import 'bookList.dart';
 import 'package:owl_book/services/auth.dart';
 import 'maps.dart';
@@ -9,36 +10,38 @@ class SecondHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.account_circle)),
-                Tab(icon: Icon(Icons.my_location)),
-                Tab(icon: Icon(Icons.search))
-
+        debugShowCheckedModeBanner: false,
+        home: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            body: TabBarView(
+              children: [
+                FirstScreen(),
+                SecondScreen(),
+                ThirdScreen()
               ],
             ),
-            title: Text('OWLBOOK;)'),
+            // drawer: Drawer(
+
+            //   child: ListView(
+            //     // Important: Remove any padding from the ListView.
+            //     padding: EdgeInsets.zero,
+            //     children: < Widget > [
+
+            //     ],
+            //   ),
+            // ),
           ),
-          body: TabBarView(
-            children: [
-              FirstScreen(),
-              SecondScreen(),
-              ThirdScreen()
-            ],
-          ),
-        ),
-      ),
+        )
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({
+    Key key,
+    this.title
+  }): super(key: key);
 
   final String title;
 
@@ -46,7 +49,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State < MyHomePage > {
   final myController = TextEditingController();
 
   get text => null;
@@ -96,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: < Widget > [
                 emailField,
                 SizedBox(
                   height: 35.0,
@@ -117,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BookFinderPage(text: textToSend,),
+          builder: (context) => BookFinderPage(text: textToSend, ),
         ));
   }
 }
@@ -131,37 +134,34 @@ class _MyHomePageState extends State<MyHomePage> {
 class SecondScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child:Center(
-          child: Maps(),
-        )
-    );
+    return Maps();
 
   }
 }
 
 class FirstScreen extends StatelessWidget {
-  final AuthService _auth=AuthService();
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            Text("Moaz"),
-            FloatingActionButton(
-              onPressed: () async{
-                // Add your onPressed code here!
-                await _auth.signOut();
-              },
-              child: Icon(Icons.power_settings_new),
-              backgroundColor: Colors.blue,
+    return profile2();
+    // return Container(
+    //   child: Center(
+    //     child: Column(
+    //       children: <Widget>[
+    //         Text("Moaz"),
+    //         FloatingActionButton(
+    //           onPressed: () async{
+    //             // Add your onPressed code here!
+    //             await _auth.signOut();
+    //           },
+    //           child: Icon(Icons.power_settings_new),
+    //           backgroundColor: Colors.blue,
 
-            ),
-          ],
-        ),
-      ),
-    );
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }
 

@@ -31,8 +31,12 @@ class _RegisterState extends State<Register> {
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 15.0),
+//              Image.asset(
+//                'Assets/logo.png',
+//              ),
+              SizedBox(height: 23.0),
 
               TextFormField(
                 style: TextStyle(
@@ -52,7 +56,7 @@ class _RegisterState extends State<Register> {
                   setState(() => email = val);
                 },
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 23.0),
               TextFormField(
                 obscureText: true,
                 style: TextStyle(
@@ -72,7 +76,7 @@ class _RegisterState extends State<Register> {
                   setState(() => password = val);
                 },
               ),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 23.0,),
               TextFormField(
                 obscureText: true,
                 style: TextStyle(
@@ -89,7 +93,7 @@ class _RegisterState extends State<Register> {
                 ),
                 validator: (val) => val != password ? 'confirm your password please!' : null,
               ),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 23.0,),
               TextFormField(
                 obscureText: true,
                 style: TextStyle(
@@ -109,48 +113,48 @@ class _RegisterState extends State<Register> {
                   setState(() => phone = val);
                 },
               ),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 23.0,),
               MaterialButton(
                 onPressed: () async {
                   if(_formKey.currentState.validate())
+                  {
+                    loading=true;
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                    if(result == null)
                     {
-                      loading=true;
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password);
-                      if(result == null)
-                        {
-                          setState(() {
-                            error = 'please supply a valid email!!';
-                            loading=false;
-                          });
+                      setState(() {
+                        error = 'please supply a valid email!!';
+                        loading=false;
+                      });
 
-                        }
-                      else
-                        {
+                    }
+                    else
+                    {
 //                          add the location and phone number in the database i do not know how yet
-                          double longitude=0.0;
-                          double latitude=0.0;
-                          final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+                      double longitude=0.0;
+                      double latitude=0.0;
+                      final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-                          geolocator
-                              .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-                              .then((Position position) async {
-                              longitude=position.longitude;
-                              latitude=position.latitude;
+                      geolocator
+                          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+                          .then((Position position) async {
+                        longitude=position.longitude;
+                        latitude=position.latitude;
 //                              print(longitude);
 //                              print("------------------------------------------------------");
 //                              print(latitude);
-                              await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[]);
+                        await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[],email);
 
-                          }).catchError((e) {
-                            print(e);
-                          });
-
-
+                      }).catchError((e) {
+                        print(e);
+                      });
 
 
 
-                        }
+
+
                     }
+                  }
 
                 },
                 child: Text('SIGN UP',
