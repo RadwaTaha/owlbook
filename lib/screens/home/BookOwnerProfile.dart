@@ -3,6 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:ui' as ui;
+
+
+var COLORS = [
+  Color(0xffc12026),
+  Color(0xFFFF90B3),
+  Color(0xFFFFC2E2),
+  Color(0xFFB892FF),
+  Color(0xFFB892FF)
+];
+
 class BookOwnerProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,11 +38,12 @@ Widget rowCell(int count, String type) => new Expanded(child: new Column(childre
 
 class _BOPState extends State<BOP> {
 
-String mail="";
-String phone="";
-List books=[];
-List Bookname=[];
-List authoer=[];
+  String mail="";
+  String phone="";
+  List books=[];
+  List Bookname=[];
+  List authoer=[];
+  List covers=[];
 
 
   @override
@@ -40,9 +51,10 @@ List authoer=[];
 
     SharedPreferences.getInstance().then((prefs){
       setState(() {
+        covers=prefs.getStringList("Ownerbookcovers");
         mail=prefs.get("OwnerMail");
         phone=prefs.get("Ownerphone");
-       // books=prefs.getStringList("Ownerbooks");
+        // books=prefs.getStringList("Ownerbooks");
         Bookname=prefs.getStringList("Ownerbooknames");
         authoer=prefs.getStringList("Ownerbookauthors");
         //Bookname=prefs.get("Ownerbooknames");
@@ -70,72 +82,232 @@ List authoer=[];
         .height;
     //final String imgUrl = 'https://pixel.nymag.com/imgs/daily/selectall/2017/12/26/26-eric-schmidt.w700.h700.jpg';
 
-    return new Stack(children: <Widget>[
-      new Container(color: Colors.red,),
-      new Image(image: AssetImage('Assets/logo.png')),
-      new BackdropFilter(
-          filter: new ui.ImageFilter.blur(
-            sigmaX: 6.0,
-            sigmaY: 6.0,
+    return new Scaffold(
+      backgroundColor: Colors.white,
+      body: new Stack(
+        children: < Widget > [
+          new Transform.translate(
+            offset: new Offset(0.0, MediaQuery.of(context).size.height * 0.1050),
+            child: new ListView.builder(
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 50.0, bottom: 50.0),
+              scrollDirection: Axis.vertical,
+              primary: true,
+              itemCount: Bookname.length,
+              itemBuilder: (BuildContext content, int index) {
+                return AwesomeListItem(
+                    title: Bookname[index],
+                    content: authoer[index],
+                    color: Color(0xffc12026),
+                    image: covers[index]);
+              },
+            ),
           ),
-          child: new Container(
-            decoration: BoxDecoration(
-              color: Colors.red.withOpacity(1),
-              borderRadius: BorderRadius.all(Radius.circular(50.0)),
-            ),)),
-      new Scaffold(
-          appBar: new AppBar(
-            //title: new Text(widget.title),
-            centerTitle: false,
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-          ),
-          drawer: new Drawer(child: new Container(),),
-          backgroundColor: Colors.transparent,
-          body: new Center(
-            child: new Column(
-              children: <Widget>[
-                new SizedBox(height: _height / 12,),
-                new CircleAvatar(
-                  radius: _width < _height ? _width / 4 : _height / 4,
-                  backgroundImage:  AssetImage('Assets/logo.png')),
-                new SizedBox(height: _height / 25.0,),
-                new Text(mail, style: new TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: _width / 15,
-                    color: Colors.white),),
-                new Padding(padding: new EdgeInsets.only(
-                    top: _height / 30, left: _width / 8, right: _width / 8),
-                  child: new Text(
-                    phone,
-                    style: new TextStyle(fontWeight: FontWeight.normal,
-                        fontSize: _width / 25,
-                        color: Colors.white), textAlign: TextAlign.center,),),
-                new Divider(height: _height / 30, color: Colors.white,),
-                new Column(
-                  children: <Widget>[
-                    new Text(Bookname.toString()),
-                    new Text(authoer.toString()),
-                   // rowCell(, 'POSTS'),
-                    //new Icon(Icons.person),
-//                    rowCell(1, ),
-//                    rowCell(275, 'FOLLOWING'),
-                  ],),
-                new Divider(height: _height / 30, color: Colors.white),
-                new Padding(padding: new EdgeInsets.only(
-                    left: _width / 8, right: _width / 8),
-                  child: new FlatButton(onPressed: () {},
-                    child: new Container(child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Icon(Icons.person),
-                        new SizedBox(width: _width / 30,),
-                        new Text('Notifiy')
-                      ],)), color: Colors.blue[50],),),
-              ],
+
+          new Transform.translate(
+            offset: Offset(0.0, -56.0),
+            child: new Container(
+              child: new ClipPath(
+                clipper: new MyClipper(),
+                child: new Stack(
+                  children: [
+                    new Image.network(
+                      "https://images.unsplash.com/photo-1497100022365-1a3688dc53ec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=923&q=80",
+                      fit: BoxFit.cover,
+                    ),
+                    new Opacity(
+                      opacity: 0.2,
+                      child: new Container(color: COLORS[0]),
+                    ),
+                    // new SizedBox(height: 12.0),
+                    new Transform.translate(
+                        offset: Offset(0.0, 50.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: < Widget > [
+                            new SizedBox(height: 50.0),
+                            new Row(
+
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: < Widget > [
+                                new CircleAvatar(
+
+                                  child: new Container(
+                                    decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.transparent,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                            "https://avatars2.githubusercontent.com/u/3234592?s=460&v=4"),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                new SizedBox(width: 25.0),
+                                new Column(
+                                  children: < Widget > [
+
+
+//                                    new Text(
+//                                      mail,
+//
+//                                      style: new TextStyle(
+//                                          color: Colors.white,
+//                                          fontSize: 27.0,
+//                                          letterSpacing: 2.0),
+//                                    ),
+                                    new Text(
+                                      mail,
+
+                                      style: new TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.0,
+                                          letterSpacing: 2.0),
+                                    ),
+
+                                  ],
+
+
+                                ),
+                                SizedBox(height:20,width: 10,),
+
+
+
+
+                              ],
+
+
+                            ),
+
+
+                          ],
+                        )
+
+                    ),
+
+                  ],
+                ),
+              ),
             ),
           )
-      )
-    ],);
+        ],
+      ),
+    );
+  }
+
+}
+
+
+
+
+
+class MyClipper extends CustomClipper < Path > {
+  @override
+  Path getClip(Size size) {
+    Path p = new Path();
+    p.lineTo(size.width, 0.0);
+    p.lineTo(size.width, size.height / 3.75);
+    p.lineTo(0.0, size.height / 3.75);
+    p.close();
+    return p;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldClipper) {
+    return true;
+  }
+}
+
+class AwesomeListItem extends StatefulWidget {
+  String title;
+  String content;
+  Color color;
+  String image;
+
+  AwesomeListItem({
+    this.title,
+    this.content,
+    this.color,
+    this.image
+  });
+
+  @override
+  _AwesomeListItemState createState() => new _AwesomeListItemState();
+}
+
+class _AwesomeListItemState extends State < AwesomeListItem > {
+  @override
+  Widget build(BuildContext context) {
+    return new Row(
+      children: < Widget > [
+        new Container(width: 10.0, height: 190.0, color: widget.color),
+        new Expanded(
+          child: new Padding(
+            padding:
+            const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: < Widget > [
+                new Text(
+                  widget.title,
+                  style: TextStyle(
+                      color: Colors.grey.shade800,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
+                ),
+                new Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: new Text(
+                    widget.content,
+                    style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        new Container(
+          height: 150.0,
+          width: 150.0,
+          color: Colors.white,
+          child: Stack(
+            children: < Widget > [
+              new Transform.translate(
+                offset: new Offset(50.0, 0.0),
+                child: new Container(
+                  height: 100.0,
+                  width: 100.0,
+                  color: widget.color,
+                ),
+              ),
+              new Transform.translate(
+                offset: Offset(10.0, 20.0),
+                child: new Card(
+                  elevation: 20.0,
+                  child: new Container(
+                    height: 120.0,
+                    width: 120.0,
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                            width: 10.0,
+                            color: Colors.white,
+                            style: BorderStyle.solid),
+                        image: DecorationImage(
+                          image: NetworkImage(widget.image),
+                        )),
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
