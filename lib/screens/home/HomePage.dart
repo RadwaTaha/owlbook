@@ -14,6 +14,16 @@ class SecondHome extends StatelessWidget {
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
+          drawer: Drawer(
+
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: < Widget > [
+
+              ],
+            ),
+          ),
           body: TabBarView(
             children: [
               FirstScreen(),
@@ -21,16 +31,7 @@ class SecondHome extends StatelessWidget {
               ThirdScreen()
             ],
           ),
-          // drawer: Drawer(
-
-          //   child: ListView(
-          //     // Important: Remove any padding from the ListView.
-          //     padding: EdgeInsets.zero,
-          //     children: < Widget > [
-
-          //     ],
-          //   ),
-          // ),
+          
         ),
       )
     );
