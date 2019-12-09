@@ -12,7 +12,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:owl_book/services/database.dart';
 import 'package:owl_book/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'mapGeo.dart';
+import 'dart:math' show cos, sqrt, asin;
+import 'BookOwnerProfile.dart';
+
+
+
 void main() => runApp(Maps());
 
 class Maps extends StatelessWidget {
@@ -27,7 +31,7 @@ class Maps extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title:"hello"),
+      home: MyHomePage(title:"moaz"),
     );
   }
 }
@@ -85,7 +89,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 final marker=Marker(
                   markerId: MarkerId(uid),
                   position: LatLng(currentLocation.latitude,currentLocation.longitude),
-                  infoWindow: InfoWindow(title: mail,snippet: address),
+                  infoWindow: InfoWindow(title: mail,snippet: address,onTap: () {
+//                    Navigator.push(
+//                      context,
+//                      MaterialPageRoute(builder: (context) => BookOwnerProfile()),
+//                    );
+
+
+                  }),
                 );
                 _markers[uid]=marker;
 
@@ -162,36 +173,106 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: RaisedButton(
                   color: Color(0xffc12026),
                   onPressed: () {
+                    int count=0;
 
 
-
-                    final CollectionReference userCollection = Firestore.instance
-                        .collection('users');
+                    final CollectionReference userCollection = Firestore.instance.collection('users');
                     userCollection.snapshots().listen((snapshot) {
                       snapshot.documents.forEach((doc)  {
                         print("hello");
+                        bool found=false;
+
+                        for (int i = 0; doc.data['books'].length > i; i++) {
+                          String book = doc.data['books'][i]['name'];
+                          if (book.toLowerCase() == bookName.toLowerCase()) {
+                            found = true;
+                          }
+                        }
+
 
                         if (doc.documentID != uid) {
-                          print("hello2");
-                          final coordinates1 = new Coordinates(doc.data['lattitude'], doc.data['longitude']);
-    Geocoder.local.findAddressesFromCoordinates(coordinates1).then((addresses1){
-      var first1 = addresses1.first;
-      final marker1 = Marker(
-        markerId: MarkerId(doc.documentID),
-        position: LatLng(doc.data['lattitude'], doc
-            .data['longitude']),
-        infoWindow: InfoWindow(
-            title: doc.data['email'], snippet: first1.addressLine),
+                          if(found){
+                            //print("hello2");
+                            //print(doc.data['lattitude']);
+                            double totalDistance = 0;
+                            totalDistance = calculateDistance(currentLocation.latitude, currentLocation.longitude, doc.data['lattitude'], doc.data['longitude']);
+                            print(totalDistance);
+                           // print(doc.data['email']);
 
-      );
+                            if(totalDistance<500) {
+                              final coordinates1 = new Coordinates(
+                                  doc.data['lattitude'],
+                                  doc.data['longitude']);
+                              Geocoder.local
+                                  .findAddressesFromCoordinates(
+                                  coordinates1).then((addresses1) {
+                                var first1 = addresses1.first;
+                                final marker1 = Marker(
+                                    markerId: MarkerId(doc.documentID),
+                                    position: LatLng(doc.data['lattitude'],
+                                        doc.data['longitude']),
+                                    infoWindow: InfoWindow(
+                                        title: doc.data['email'],
+                                        snippet: first1.addressLine),
+                                        onTap: () {
 
-     setState(() {
-       _markers[doc.documentID] = marker1;
+                                       print(found);
+                                      SharedPreferences.getInstance().then((prefs) {
+                                        List<String> books=[];
+                                        List<String> authors=[];
+                                        List<String> covers=[];
+//
+                                        for(int i=0;doc.data['books'].length>i;i++){
+                                          books.add(doc.data['books'][i]['name']);
+                                          authors.add(doc.data['books'][i]['author']);
+                                          covers.add(doc.data['books'][i]['coverUrl']);
+                                          //books[i]=doc.data['books'][i]['name'];
+                                         // authors[i]=doc.data['books'][i]['author'];
+                                         // covers[i]=doc.data['books'][i]['coverUrl'];
+                                        }
 
-     });
 
-      print(_markers.length);
-    });
+//                                        SharedPreferences.getInstance().then((prefs) async{
+//                                          await prefs.setStringList("booksnames",books );
+//                                          await prefs.setStringList("bookauthors", authors);
+//                                          await prefs.setStringList("bookcovers", covers);
+//
+//
+//                                        });
+
+
+                                        print("hereeeeeeeeeeeeeeeeee");
+                                        prefs.setString("OwnerMail", doc.data['email']);
+                                        prefs.setString("Ownerphone", doc.data['phone']);
+                                        prefs.setStringList("Ownerbooknames", books);
+                                        prefs.setStringList("Ownerbookauthors", authors);
+                                        prefs.setStringList("Ownerbookcovers", covers);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => BookOwnerProfile(),
+                                        ));
+
+                                      });
+
+
+
+                                    }
+
+
+                                );
+                                setState(() {
+                                  _markers[doc.documentID] = marker1;
+                                });
+
+                                print(_markers.length);
+                              });
+                            }
+//                                  ---------------------------------
+                          }
+////                                ----------------------------------------Pop up menu---------------------------------------------------------
+//                          if(count==0){
+//                            print("no books found for you sorry;(");
+//                          }
 
                         }
                       });
@@ -218,6 +299,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
   }
+
+  double calculateDistance(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a));
+  }
+
 
 
   void onMapCreated(controller){

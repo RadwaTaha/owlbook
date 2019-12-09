@@ -117,44 +117,44 @@ class _RegisterState extends State<Register> {
               MaterialButton(
                 onPressed: () async {
                   if(_formKey.currentState.validate())
+                  {
+                    loading=true;
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                    if(result == null)
                     {
-                      loading=true;
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password);
-                      if(result == null)
-                        {
-                          setState(() {
-                            error = 'please supply a valid email!!';
-                            loading=false;
-                          });
+                      setState(() {
+                        error = 'please supply a valid email!!';
+                        loading=false;
+                      });
 
-                        }
-                      else
-                        {
+                    }
+                    else
+                    {
 //                          add the location and phone number in the database i do not know how yet
-                          double longitude=0.0;
-                          double latitude=0.0;
-                          final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+                      double longitude=0.0;
+                      double latitude=0.0;
+                      final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-                          geolocator
-                              .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-                              .then((Position position) async {
-                              longitude=position.longitude;
-                              latitude=position.latitude;
+                      geolocator
+                          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+                          .then((Position position) async {
+                        longitude=position.longitude;
+                        latitude=position.latitude;
 //                              print(longitude);
 //                              print("------------------------------------------------------");
 //                              print(latitude);
-                              await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[],email);
+                        await DatabaseService(uid: result.uid).updateUserData(phone, longitude, latitude,[],email);
 
-                          }).catchError((e) {
-                            print(e);
-                          });
-
-
+                      }).catchError((e) {
+                        print(e);
+                      });
 
 
 
-                        }
+
+
                     }
+                  }
 
                 },
                 child: Text('SIGN UP',
