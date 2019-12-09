@@ -27,6 +27,7 @@ class DatabaseService
 
   }
   Future addBooks(String name, String author , String cover) async{
+
     
 
 //    debugPrint(this.total.toString());

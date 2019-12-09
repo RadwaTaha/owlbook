@@ -10,6 +10,7 @@ class SecondHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
         length: 3,
@@ -135,10 +136,10 @@ class _MyHomePageState extends State < MyHomePage > {
   void _sendDataToSecondScreen(BuildContext context) {
     String textToSend = myController.text;
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BookFinderPage(text: textToSend, ),
-      ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => BookFinderPage(text: textToSend, ),
+        ));
   }
 }
 
@@ -151,33 +152,7 @@ class _MyHomePageState extends State < MyHomePage > {
 class SecondScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Container(
-          height: 50.0,
-          width: 350.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            color: Colors.white
-          ),
-          child: RaisedButton(
-            color: Color(0xffc12026),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Maps()),
-              );
-            },
-            child: const Text(
-              'Hurry up and Find your book!!',
-              style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-
-            ),
-          ),
-        ),
-
-      )
-    );
+    return Maps();
 
   }
 }
