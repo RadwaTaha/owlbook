@@ -83,6 +83,8 @@ List<Book> _fetchBooks() {
 
 Future<List<Book>> _fetchPotterBooks() async {
   final res = await http.get(url);
+  print("URL: "+url);
+  print(res.body);
   if (res.statusCode == 200) {
     print(json.decode(res.body)["items"][1]["volumeInfo"]["authors"].join(', '));
     return _parseBookJson(res.body);
