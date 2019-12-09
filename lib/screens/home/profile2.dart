@@ -3,6 +3,10 @@ import 'package:owl_book/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:owl_book/screens/home/addBook.dart';
+
+import 'maps.dart';
+
 
 var COLORS = [
   Color(0xffc12026),
@@ -15,31 +19,31 @@ var COLORS = [
 class profile2 extends StatefulWidget {
 
 
-@override
-_profile2State createState() => _profile2State();
+  @override
+  _profile2State createState() => _profile2State();
 }
-class _profile2State extends State < profile2 >{
+class _profile2State extends State < profile2 > {
   var data = [];
-  String mail="";
-  String uid="";
-  final AuthService _auth=AuthService();
+  String mail = "";
+  String uid = "";
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
 
-    bool found=false;
-    SharedPreferences.getInstance().then((prefs){
+    bool found = false;
+    SharedPreferences.getInstance().then((prefs) {
 
       setState(() {
 
-            mail=prefs.get("email");
-            uid=prefs.get("uid");
-         });
+        mail = prefs.get("email");
+        uid = prefs.get("uid");
+      });
       final CollectionReference userCollection = Firestore.instance.collection('users');
-      userCollection.snapshots().listen((snapshot){
-        snapshot.documents.forEach((doc){
-          if(doc.documentID==uid){
+      userCollection.snapshots().listen((snapshot) {
+        snapshot.documents.forEach((doc) {
+          if (doc.documentID == uid) {
             setState(() {
-              data=doc.data['books'];
+              data = doc.data['books'];
 
             });
           }
@@ -55,9 +59,112 @@ class _profile2State extends State < profile2 >{
 
 
     });
-    
+
 
     return new Scaffold(
+      appBar: AppBar(
+        title: Text("OWLBOOK"),
+        backgroundColor: Color(0xffc12026),
+      ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: < Widget > [
+            new SizedBox(height: 25.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: < Widget > [
+                Icon(Icons.person),
+
+                FlatButton(
+                  textColor: Color(0xffc12026),
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.black,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.white,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => profile2(),
+                      ));
+                  },
+                  child: Text(
+                    "Profile",
+                    style: TextStyle(
+                      fontFamily: 'SFUIDisplay',
+                      color: Color(0xffc12026),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: < Widget > [
+                Icon(Icons.book),
+
+                FlatButton(
+                  textColor: Color(0xffc12026),
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.black,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.white,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Maps(),
+                      ));
+                  },
+                  child: Text(
+                    "Next Book",
+                    style: TextStyle(
+                      fontFamily: 'SFUIDisplay',
+                      color: Color(0xffc12026),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: < Widget > [
+                Icon(Icons.add),
+
+                FlatButton(
+                  textColor: Color(0xffc12026),
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.black,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.white,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddBook(),
+                      ));
+                  },
+                  child: Text(
+                    "Add Book",
+                    style: TextStyle(
+                      fontFamily: 'SFUIDisplay',
+                      color: Color(0xffc12026),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ]
+        )
+      ),
       backgroundColor: Colors.white,
       body: new Stack(
         children: < Widget > [
@@ -66,16 +173,16 @@ class _profile2State extends State < profile2 >{
             child: new ListView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 50.0, bottom: 50.0),
-              scrollDirection: Axis.vertical,
-              primary: true,
-              itemCount: data.length,
-              itemBuilder: (BuildContext content, int index) {
-                return AwesomeListItem(
+                scrollDirection: Axis.vertical,
+                primary: true,
+                itemCount: data.length,
+                itemBuilder: (BuildContext content, int index) {
+                  return AwesomeListItem(
                     title: data[index]["name"],
                     content: data[index]["author"],
                     color: Color(0xffc12026),
                     image: data[index]["coverUrl"]);
-              },
+                },
             ),
           ),
 
@@ -96,91 +203,91 @@ class _profile2State extends State < profile2 >{
                     ),
                     // new SizedBox(height: 12.0),
                     new Transform.translate(
-                        offset: Offset(0.0, 50.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: < Widget > [
-                            new SizedBox(height: 50.0),
-                            new Row(
+                      offset: Offset(0.0, 50.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: < Widget > [
+                          new SizedBox(height: 25.0),
+                          new Row(
 
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: < Widget > [
-                                new CircleAvatar(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: < Widget > [
+                              new CircleAvatar(
 
-                                  child: new Container(
-                                    decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.transparent,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                            "https://avatars2.githubusercontent.com/u/3234592?s=460&v=4"),
-                                      ),
+                                child: new Container(
+                                  decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.transparent,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        "https://avatars2.githubusercontent.com/u/3234592?s=460&v=4"),
                                     ),
                                   ),
                                 ),
-                                new SizedBox(width: 25.0),
-                                new Column(
-                                  children: < Widget > [
+                              ),
+                              new SizedBox(width: 25.0),
+                              new Column(
+                                children: < Widget > [
 
 
-//                                    new Text(
-//                                      mail,
-//
-//                                      style: new TextStyle(
-//                                          color: Colors.white,
-//                                          fontSize: 27.0,
-//                                          letterSpacing: 2.0),
-//                                    ),
-                                    new Text(
-                                      mail,
+                                  //                                    new Text(
+                                  //                                      mail,
+                                  //
+                                  //                                      style: new TextStyle(
+                                  //                                          color: Colors.white,
+                                  //                                          fontSize: 27.0,
+                                  //                                          letterSpacing: 2.0),
+                                  //                                    ),
+                                  new Text(
+                                    mail,
 
-                                      style: new TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          letterSpacing: 2.0),
-                                    ),
-
-                                  ],
-
-
-                                ),
-                                SizedBox(height:20,width: 10,),
-                                new MaterialButton(
-                                  onPressed: () async {
-                                    // Add your onPressed code here!
-                                    await _auth.signOut();
-                                  }, //since this is only a UI app
-                                  child: Text('Log out',
-                                    style: TextStyle(
-                                      color: Color(0xffc12026),
-                                      fontSize: 15,
-                                      fontFamily: 'SFUIDisplay',
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12.0,
+                                      letterSpacing: 2.0),
                                   ),
-                                  color: Colors.white,
-                                  elevation: 0,
-                                  minWidth: 80,
-                                  height: 30,
 
-                                  textColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)
+                                ],
+
+
+                              ),
+                              SizedBox(height: 20, width: 10, ),
+                              new MaterialButton(
+                                onPressed: () async {
+                                  // Add your onPressed code here!
+                                  await _auth.signOut();
+                                }, //since this is only a UI app
+                                child: Text('Log out',
+                                  style: TextStyle(
+                                    color: Color(0xffc12026),
+                                    fontSize: 15,
+                                    fontFamily: 'SFUIDisplay',
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                color: Colors.white,
+                                elevation: 0,
+                                minWidth: 80,
+                                height: 30,
+
+                                textColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                              ),
 
 
 
 
-                              ],
+                            ],
 
 
-                            ),
+                          ),
 
 
-                          ],
-                        )
+                        ],
+                      )
 
                     ),
 

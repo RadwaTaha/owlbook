@@ -104,11 +104,6 @@ class _SignInState extends State<SignIn> {
                       });
 
                     }
-                    else
-                    {
-//                          add the location and phone number in the database i do not know how yet
-
-                    }
                   }
 
                 },//since this is only a UI app

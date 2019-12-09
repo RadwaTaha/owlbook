@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:owl_book/shared/loading.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:owl_book/services/database.dart';
-import 'package:owl_book/services/auth.dart';
+
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'BookOwnerProfile.dart';
+
+import 'package:owl_book/screens/home/addBook.dart';
+import 'package:owl_book/screens/home/profile2.dart';
+
 
 
 
@@ -114,6 +118,109 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
 //    createMarker(context);
     return Scaffold(
+       appBar: AppBar(
+            title: Text("OWLBOOK"),
+            backgroundColor: Color(0xffc12026),
+          ),
+          drawer: Drawer(
+            // Add a ListView to the drawer. This ensures the user can scroll
+            // through the options in the drawer if there isn't enough vertical
+            // space to fit everything.
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: < Widget > [
+                new SizedBox(height: 25.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: < Widget > [
+                    Icon(Icons.person),
+
+                    FlatButton(
+                      textColor: Color(0xffc12026),
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.white,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => profile2(),
+                          ));
+                      },
+                      child: Text(
+                        "Profile",
+                        style: TextStyle(
+                          fontFamily: 'SFUIDisplay',
+                          color: Color(0xffc12026),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: < Widget > [
+                    Icon(Icons.book),
+
+                    FlatButton(
+                      textColor: Color(0xffc12026),
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.white,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Maps(),
+                          ));
+                      },
+                      child: Text(
+                        "Next Book",
+                        style: TextStyle(
+                          fontFamily: 'SFUIDisplay',
+                          color: Color(0xffc12026),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: < Widget > [
+                    Icon(Icons.add),
+
+                    FlatButton(
+                      textColor: Color(0xffc12026),
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.white,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddBook(),
+                          ));
+                      },
+                      child: Text(
+                        "Add Book",
+                        style: TextStyle(
+                          fontFamily: 'SFUIDisplay',
+                          color: Color(0xffc12026),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ]
+            )
+          ),
         body: mapToggle? Stack(
           children: <Widget>[
             GoogleMap(
