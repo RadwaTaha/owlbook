@@ -10,29 +10,31 @@ class SecondHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            body: TabBarView(
-              children: [
-                FirstScreen(),
-                SecondScreen(),
-                ThirdScreen()
+
+      debugShowCheckedModeBanner: false,
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          drawer: Drawer(
+
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: < Widget > [
+
               ],
             ),
-            // drawer: Drawer(
-
-            //   child: ListView(
-            //     // Important: Remove any padding from the ListView.
-            //     padding: EdgeInsets.zero,
-            //     children: < Widget > [
-
-            //     ],
-            //   ),
-            // ),
           ),
-        )
+          body: TabBarView(
+            children: [
+              FirstScreen(),
+              SecondScreen(),
+              ThirdScreen()
+            ],
+          ),
+          
+        ),
+      )
     );
   }
 }

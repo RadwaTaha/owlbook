@@ -90,3 +90,20 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+test app:
+  image: kattwinkel/flutter-andriod
+  stage: test
+  script:
+    - cd app
+    - flutter test
+
+build app:
+  image: kattwinkel/flutter-andriod
+  stage: build
+  script:
+    - cd app
+    - flutter build apk
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - app/build/app/outputs/apk/release/app-release.apk
