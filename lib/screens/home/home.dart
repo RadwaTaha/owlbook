@@ -8,7 +8,7 @@ class Home1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:SecondHome(),
+      home:Maps(),
     );
   }
 }
