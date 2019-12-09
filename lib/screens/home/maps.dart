@@ -328,6 +328,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         List<String> books=[];
                                         List<String> authors=[];
                                         List<String> covers=[];
+                                        List<String> Nbooks=[];
+                                        //Nbooks=doc.data['books'];
 //
                                         for(int i=0;doc.data['books'].length>i;i++){
                                           books.add(doc.data['books'][i]['name']);
@@ -349,6 +351,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
                                         print("hereeeeeeeeeeeeeeeeee");
+                                        //prefs.setStringList("NBook",Nbooks);
                                         prefs.setString("OwnerMail", doc.data['email']);
                                         prefs.setString("Ownerphone", doc.data['phone']);
                                         prefs.setStringList("Ownerbooknames", books);
