@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:owl_book/screens/home/profile2.dart';
+import 'maps.dart';
+import 'addBook.dart';
 
 import 'dart:ui' as ui;
 
@@ -83,6 +86,109 @@ class _BOPState extends State<BOP> {
     //final String imgUrl = 'https://pixel.nymag.com/imgs/daily/selectall/2017/12/26/26-eric-schmidt.w700.h700.jpg';
 
     return new Scaffold(
+       appBar: AppBar(
+            title: Text("OWLBOOK"),
+            backgroundColor: Color(0xffc12026),
+          ),
+          drawer: Drawer(
+            // Add a ListView to the drawer. This ensures the user can scroll
+            // through the options in the drawer if there isn't enough vertical
+            // space to fit everything.
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: < Widget > [
+                new SizedBox(height: 25.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: < Widget > [
+                    Icon(Icons.person),
+
+                    FlatButton(
+                      textColor: Color(0xffc12026),
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.white,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => profile2(),
+                          ));
+                      },
+                      child: Text(
+                        "Profile",
+                        style: TextStyle(
+                          fontFamily: 'SFUIDisplay',
+                          color: Color(0xffc12026),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: < Widget > [
+                    Icon(Icons.book),
+
+                    FlatButton(
+                      textColor: Color(0xffc12026),
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.white,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Maps(),
+                          ));
+                      },
+                      child: Text(
+                        "Next Book",
+                        style: TextStyle(
+                          fontFamily: 'SFUIDisplay',
+                          color: Color(0xffc12026),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: < Widget > [
+                    Icon(Icons.add),
+
+                    FlatButton(
+                      textColor: Color(0xffc12026),
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.white,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddBook(),
+                          ));
+                      },
+                      child: Text(
+                        "Add Book",
+                        style: TextStyle(
+                          fontFamily: 'SFUIDisplay',
+                          color: Color(0xffc12026),
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ]
+            )
+          ),
       backgroundColor: Colors.white,
       body: new Stack(
         children: < Widget > [
