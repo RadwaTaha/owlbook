@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:owl_book/shared/loading.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:owl_book/services/database.dart';
 import 'package:owl_book/services/auth.dart';
@@ -55,13 +57,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Position currentLocation;
   BitmapDescriptor customIcon;
 
-
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
   }
+
+
+
+
+
 
 
   void initState(){
@@ -302,6 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
             (1 - c((lon2 - lon1) * p))/2;
     return 12742 * asin(sqrt(a));
   }
+
 
 
   void onMapCreated(controller){

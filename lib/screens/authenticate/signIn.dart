@@ -30,9 +30,11 @@ class _SignInState extends State<SignIn> {
     print("Key2 has value ${GlobalConfiguration().getString("key2")}");
     print("Key5 has value ${cfg.getString("key5")}, this should be null!");
     return loading ? Loading() : Scaffold(
+      resizeToAvoidBottomPadding: false,
 
-      body:
-      Container(
+      body: 
+      Container(   
+        width: MediaQuery.of(context).size.width,    
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
@@ -84,6 +86,7 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 20.0),
               MaterialButton(
+                
                 onPressed: () async{
                   print(email);
                   print(password);
