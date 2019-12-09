@@ -6,7 +6,6 @@ import 'screens/wrapper.dart';
 import 'models/user.dart';
 
 import 'screens/authenticate/register.dart';
-import 'signIn.dart';
 import 'signUp.dart';
 //import 'profile.dart';
 //import 'screens/authenticate/register.dart';
