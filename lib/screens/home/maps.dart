@@ -29,7 +29,7 @@ class Maps extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title:"hello"),
+      home: MyHomePage(title:"moaz"),
     );
   }
 }
